@@ -64,7 +64,19 @@ mocha.describe('readings API', () => {
                 // Add LG18 here
 
                 // Add LG19 here
-
+				mocha.it('LG19: should have daily points for 15 + 20 minute reading intervals and quantity units with +-inf start/end time & kWh as metric ton of CO2 & chained', async () => {
+					// Load the data into the database
+					await prepareTest(unitDatakWh, conversionDatakWh, meterDatakWhGroups, groupDatakWh);
+					// Get the unit ID since the DB could use any value.
+					const unitId = await getUnitId('kWh');
+					// Load the expected response data from the corresponding csv file
+					const expected = await parseExpectedCsv('src/server/test/web/readingsData/expected_line_group_ri_15-20_mu_kWh_gu_MTonCO2_st_-inf_et_inf.csv');
+					// Create a request to the API for unbounded reading times and save the response
+					const res = await chai.request(app).get(`/api/unitReadings/line/groups/${GROUP_ID}`)
+						.query({ timeInterval: ETERNITY.toString(), graphicUnitId: unitId });
+					// Check that the API reading is equal to what it is expected to equal
+					expectReadingToEqualExpected(res, expected, GROUP_ID);
+				});
                 // Add LG20 here
 
                 // Add LG21 here
