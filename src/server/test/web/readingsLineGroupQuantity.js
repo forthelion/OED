@@ -190,6 +190,7 @@ mocha.describe('readings API', () => {
 					// Check that the API reading is equal to what it is expected to equal
 					expectReadingToEqualExpected(res, expected, GROUP_ID);
 				});
+				
                 // Add LG20 here
 
                 // Add LG21 here
